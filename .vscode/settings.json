@@ -1,0 +1,30 @@
+{
+  "files.exclude": {
+    "**/mongodb": true,
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/*_cache": true,
+    "**/__init__.py": true
+  },
+  "actionButtons": {
+    "defaultColor": "#ff0034",
+    "loadNpmCommands": false,
+    "reloadButton": "♻️",
+    "commands": []
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "editor.defaultFormatter": "ms-python.black-formatter",
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.terminal.activateEnvironment": false,
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.pytestParameters": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "mypy-type-checker.cwd": "${workspaceFolder}/src",
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+  "mypy-type-checker.preferDaemon": true,
+  "mypy-type-checker.reportingScope": "workspace",
+}

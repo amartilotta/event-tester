@@ -1,0 +1,107 @@
+[tool.poetry]
+name = "event-tester"
+version = "1.0.0"
+description = "Event Tester"
+authors = ["amartilotta <agustin.martilotta@hotmail.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = "^0.30.1"
+python-dotenv = "^1.0.1"
+fastapi = "0.115.5"
+httpx = "^0.28.0"
+python-keycloak = "^4.7.3"
+psycopg2-binary = "^2.9.10"
+alembic = "^1.14.0"
+pydantic = {extras = ["email"], version = "^2.10.3"}
+sqlmodel = "^0.0.22"
+sqlalchemy-utils = "^0.41.2"
+nanoid = "^2.0.0"
+pydantic-settings = "^2.6.1"
+pydantic-i18n = "^0.4.5"
+google-cloud-storage = "^2.18.2"
+python-multipart = "^0.0.19"
+pillow = "^11.0.0"
+sentry-sdk = {extras = ["fastapi"], version = "^2.19.0"}
+pydantic-extra-types = "^2.10.0"
+pycountry = "^24.6.1"
+mongoengine = "^0.29.1"
+pytest-playwright = "^0.6.2"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.13.0"
+black = "^24.10.0"
+ruff = "^0.8.1"
+ipdb = "^0.13.13"
+debugpy = "^1.8.9"
+pickleshare = "^0.7.5"
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+pytest-alembic = "^0.11.1"
+pytest-sugar = "^1.0.0"
+types-pymysql = "^1.1.0.20241103"
+types-pyyaml = "^6.0.12.20240917"
+types-pygments = "^2.18.0.20240506"
+types-babel = "^2.11.0.15"
+types-cffi = "^1.16.0.20240331"
+types-colorama = "^0.4.15.20240311"
+types-decorator = "^5.1.8.20240310"
+types-psycopg2 = "^2.9.21.20241019"
+types-setuptools = "^75.6.0.20241126"
+types-six = "^1.16.21.20241105"
+types-ujson = "^5.10.0.20240515"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+mypy_path = ["src"]
+plugins = [
+  "pydantic.mypy"
+]
+ignore_missing_imports = true
+explicit_package_bases = true
+check_untyped_defs = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.ruff]
+line-length = 79
+exclude = [".env", ".venv", "venv"]
+output-format = "concise"
+
+[tool.ruff.lint]
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I001"
+]
+ignore = ["E501"]
+fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "manage", "api", "config", "core", "jobs", "tools", "utilities"]
+
+[tool.black]
+line-length = 79
+force-exclude = '''
+/(
+  | .env
+  | .venv
+  | .mako
+  | venv
+  | notebooks
+)/
+'''

@@ -1,0 +1,36 @@
+services:
+  event-tester:
+    container_name: event-tester
+    restart: always
+    build:
+      context: .
+      dockerfile: ./deployment/docker/Dockerfile
+      target: backend
+    ports:
+      - ${DEBUG_PORT-8401}:${DEBUG_PORT-8401}
+      - $API_PORT:8400
+    env_file: .env
+    volumes:
+      - ./src:/app:cached
+      - ./logs:/tmp/logs
+      - /etc/localtime:/etc/localtime
+    depends_on:
+      - mongodb-event-tester
+    stdin_open: true
+    tty: true
+
+  mongodb-event-tester:
+    container_name: mongodb-event-tester
+    image: mongo:6-jammy
+    restart: always
+    ports:
+      - $DATABASE_EXPOSED_PORT:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - ./mongodb:/data/db
+
+networks:
+  default:
+    name: bugster

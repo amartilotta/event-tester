@@ -1,11 +1,12 @@
 
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from schemas.inputs.even_input import EventsInput
 from services.event_service import event_service
 from services.user_history_service import user_story_service
+from services.playwright_serivce import playwright_service
 
 router = APIRouter()
 
@@ -26,9 +27,35 @@ async def get_stories(session_id: Optional[str]=None)    :
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/test")
-async def get_test(session_id: Optional[str]=None)    :
+async def get_test():
     try:
-        return event_service.get_test(session_id)
+        print("entro")
+        playwright_service.generate_test(
+
+                {
+                    "id": "us-56676925-6e55-4072-98db-ca544bd3dbb5",
+                    "title": "User Story for 56676925-6e55-4072-98db-ca544bd3dbb5",
+                    "actions": [
+                        {
+                            "type": "$click",
+                            "class": "flex items-center justify-between",
+                            "target": "div"
+                        },
+                        {
+                            "type": "$click",
+                            "class": "flex w-full h-full items-center transition-transfo...",
+                            "target": "span"
+                        },
+                        {
+                            "type": "$click",
+                            "class": "flex w-full items-center rounded-md border-transpa...",
+                            "target": "a"
+                        }
+                    ]
+                }
+
+        )
+        return {}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

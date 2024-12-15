@@ -7,15 +7,11 @@ router = APIRouter()
 
 print("\n\n\n\n\n\n\n\n\n\n")
 print("⚽⚽⚽⚽⚽⚽⚽⚽⚽")
-print("¡¡¡¡¡VAMOS BOCAAA!!!!")
-print("¡¡¡¡¡VAMOS BOCAAA!!!!")
-print("¡¡¡¡¡VAMOS BOCAAA!!!!")
-print("¡¡¡¡¡VAMOS BOCAAA!!!!")
-print("¡¡¡¡¡VAMOS BOCAAA!!!!")
+
 print("⚽⚽⚽⚽⚽⚽⚽⚽⚽")
 print("\n\n")
 
-print("EL DIAAVLO 😈😈")
+print("APLICACION LEVANTADA")
 print("\n\n\n")
 
 router.include_router(event_controller.router, tags=["events"])

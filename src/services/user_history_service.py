@@ -1,6 +1,6 @@
-import uuid
 from collections import defaultdict
 from datetime import datetime
+
 from models.event_model import Event
 
 

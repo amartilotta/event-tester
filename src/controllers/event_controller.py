@@ -30,8 +30,8 @@ async def get_stories(session_id: Optional[str]=None)    :
 async def get_test():
     try:
         print("entro")
-        playwright_service.generate_test(
-
+        playwright_service.generate_tests(
+            [
                 {
                     "id": "us-56676925-6e55-4072-98db-ca544bd3dbb5",
                     "title": "User Story for 56676925-6e55-4072-98db-ca544bd3dbb5",
@@ -52,8 +52,30 @@ async def get_test():
                             "target": "a"
                         }
                     ]
-                }
-
+                },
+                # {
+                #     "id": "us-56676925-6e55-4072-98db-ca544bd3dff5",
+                #     "title": "User Story for 56676925-6e55-4072-98db-ca544bd3dbb5",
+                #     "actions": [
+                #         {
+                #             "type": "$click",
+                #             "class": "flex items-center justify-between",
+                #             "target": "div"
+                #         },
+                #         {
+                #             "type": "$input",
+                #             "class": "h-4",
+                #             "target": "svg",
+                #             "value": "LOREM"
+                #         },
+                #         {
+                #             "type": "$click",
+                #             "class": "flex w-full items-center rounded-md border-transpa...",
+                #             "target": "a"
+                #         }
+                #     ]
+                # }
+            ]
         )
         return {}
     except Exception as e:

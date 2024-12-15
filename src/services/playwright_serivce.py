@@ -10,7 +10,6 @@ class PlaywrightTestGenerator:
         os.makedirs(self.output_directory, exist_ok=True)
 
     def generate_tests(self, user_stories):
-        # Template para el test
         test_template = Template(dedent(
 '''
         from playwright.sync_api import sync_playwright

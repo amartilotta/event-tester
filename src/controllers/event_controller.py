@@ -1,12 +1,12 @@
 
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 
 from schemas.inputs.even_input import EventsInput
 from services.event_service import event_service
-from services.user_history_service import user_story_service
 from services.playwright_serivce import playwright_service
+from services.user_history_service import user_story_service
 
 router = APIRouter()
 
@@ -29,7 +29,6 @@ async def get_stories(session_id: Optional[str]=None)    :
 @router.get("/test")
 async def get_test():
     try:
-        print("entro")
         playwright_service.generate_tests(
             [
                 {
@@ -53,28 +52,28 @@ async def get_test():
                         }
                     ]
                 },
-                # {
-                #     "id": "us-56676925-6e55-4072-98db-ca544bd3dff5",
-                #     "title": "User Story for 56676925-6e55-4072-98db-ca544bd3dbb5",
-                #     "actions": [
-                #         {
-                #             "type": "$click",
-                #             "class": "flex items-center justify-between",
-                #             "target": "div"
-                #         },
-                #         {
-                #             "type": "$input",
-                #             "class": "h-4",
-                #             "target": "svg",
-                #             "value": "LOREM"
-                #         },
-                #         {
-                #             "type": "$click",
-                #             "class": "flex w-full items-center rounded-md border-transpa...",
-                #             "target": "a"
-                #         }
-                #     ]
-                # }
+                {
+                    "id": "us-56676925-6e55-4072-98db-ca544bd3dff5",
+                    "title": "User Story for 56676925-6e55-4072-98db-ca544bd3dbb5",
+                    "actions": [
+                        {
+                            "type": "$click",
+                            "class": "flex items-center justify-between",
+                            "target": "div"
+                        },
+                        {
+                            "type": "$input",
+                            "class": "h-4",
+                            "target": "svg",
+                            "value": "LOREM"
+                        },
+                        {
+                            "type": "$click",
+                            "class": "flex w-full items-center rounded-md border-transpa...",
+                            "target": "a"
+                        }
+                    ]
+                }
             ]
         )
         return {}

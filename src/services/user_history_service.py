@@ -20,13 +20,11 @@ class UserStoryService:
                 event_dict = event.to_mongo().to_dict()
                 distinct_id = event_dict['properties']['distinct_id']
                 timestamp = event_dict['properties']['timestamp']
-                # Convertir timestamp a datetime
                 event_dict['properties']['timestamp'] = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
                 grouped[distinct_id].append(event_dict)
             except KeyError:
                 print(f"Evento inválido: {event_dict}")
 
-        # Ordenar eventos dentro de cada usuario por timestamp
         for user_id in grouped:
             grouped[user_id].sort(key=lambda x: x['properties']['timestamp'])
         return grouped

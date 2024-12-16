@@ -1,16 +1,3 @@
-despues de instalar Playwright poner playwright install  en la terminal
-
-╔════════════════════════════════════════════════════════════╗
-║ Looks like Playwright was just installed or updated.       ║
-║ Please run the following command to download new browsers: ║
-║                                                            ║
-║     playwright install                                     ║
-║                                                            ║
-║ <3 Playwright Team                                         ║
-╚════════════════════════════════════════════════════════════╝
-
-
-
 El proyecto se encuentra desarrollado con **Fastapi**, utilizado dentro de un ambiente de desarrollo con **Docker**, y utilizando la imagen de **Python 3.13**.
 
 
@@ -25,12 +12,16 @@ El proyecto se encuentra desarrollado con **Fastapi**, utilizado dentro de un am
   - [1.4 Instalación de dependencias (Opcional)](#14-instalación-de-dependencias-opcional)
 - [2. Levantar contenedor](#2-levantar-contenedor)
   - [2.1 Comandos dentro del contenedor](#21-comandos-dentro-del-contenedor)
-- [3. Linter y Extensiones](#3-linter-y-extensiones)
-  - [3.1 Recommended IDE Setup](#31-recommended-ide-setup)
-  - [3.2 Formateo de código y Linter](#32-formateo-de-código-y-linter)
-  - [3.3 Test unitarios](#33-test-unitarios)
-  - [3.4 Check tipado](#34-check-tipado)
-- [4. Descripción de servicios basicos](#4-descripción-de-servicios-basicos)
+- [3. Descripción de servicios basicos](#3-descripción-de-servicios-basicos)
+- [4. Explicación de Decisiones de Diseño](#4-explicación-de-decisiones-de-diseño)
+  - [4.1 Modularidad](#41-modularidad)
+  - [4.2 Uso de Plantillas](#42-uso-de-plantillas)
+  - [4.3 Validación y Extensibilidad](#43-validación-y-extensibilidad)
+  - [4.4 Tipado de Entradas y Salidas](#44-tipado-de-entradas-y-salidas)
+  - [4.5 Documentación con Docstrings](#45-documentacion-con-docstrings)
+  - [4.6 Despliegue con Docker](#46-despliegue-con-docker)
+  - [4.7 Base de Datos MongoDB](#47-base-de-datos-mongoDB)
+  - [4.8 Generación de Assertions](#48-generacion-de-assertions)
 
 <br />
 
@@ -125,69 +116,113 @@ sh scripts/shell.sh <tu-comando>
 > 📌 **Info:** No es necesario remplazar \<tu-comando> . Si se deja vacío, se mostrara la terminal del contenedor teniendo libertad dentro del mismo
 
 
-## 3. Linter y Extensiones
+## 3. Descripción de servicios basicos
 
-Nuestro proyecto cuenta con un **linter** que nos ayuda a mantener un código **limpio y ordenado**. Para poder utilizarlo es necesario instalar las siguientes **extensiones** en tu IDE:
-
-- [VSCode](https://code.visualstudio.com/).
-- [Python IntelliSense](vscode:extension/ms-python.python).
-- [Black Formatter](vscode:extension/ms-python.black-formatter).
-- [Ruff](vscode:extension/charliermarsh.ruff).
-- [Pylance](vscode:extension/ms-python.vscode-pylance).
-- [Mypy Checker](vscode:extension/ms-python.mypy-type-checker).
-
-
-### 3.1 Recommended IDE Setup
-
-Las siguientes extensiones son **recomendadas** para un mejor uso del IDE:
-
-- [Debugpy](vscode:extension/ms-python.debugpy).
-- [Docker](vscode:extension/ms-azuretools.vscode-docker).
-- [Error Lens](vscode:extension/usernamehw.errorlens).
-- [Better Comments](vscode:extension/aaron-bond.better-comments).
-- [VsCode Action Buttons](vscode:extension/seunlanlege.action-buttons).
-
-### 3.2 Formateo de código y Linter
-
-
-Para correr el formateo de código utilizamos:
-
-```sh
-make format
-```
-Junto al check linter:
-```sh
-make linter
-```
-
-### 3.3 Test unitarios
-
-Para correr los test unitarios utilizamos:
-- [Pytest](https://docs.pytest.org/).
-
-Este nos permite **correr** los **test unitarios** de forma rápida y sencilla.
-
-```sh
-make tests
-```
-
-### 3.4 Check tipado
-
-Para correr el checkeo de tipado utilizamos:
-- [MyPy](https://www.mypy-lang.org/).
-
-```sh
-make type-check
-```
-
-
-## 4. Descripción de servicios basicos
-
-Toda la parte de **documentación** de la **API** se encuentra en [**`docs`**](http://localhost:3305/docs)
+Toda la parte de **documentación** de la **API** se encuentra en [**`docs`**](http://localhost:8450/docs)
 
 Los servicios más utilizados son:
 
 | Resumen de servicio               | Método | URL                |
 | --------------------------------- | ------ | ------------------ |
-| Status de la aplicación           |   GET  | /health            |
-| Consultas CRUD de tasks           |   GET  | /task              |
+| Obtener historias de usuario      |   GET  | /stories           |
+| Generar pruebas                   |   GET  | /test              |
+| Obtener eventos agrupados         |   GET  | /grouped-events    |
+| Obtener patrones                  |   GET  | /patterns          |
+
+
+
+## 4. Explicación de Decisiones de Diseño
+
+Arquitectura del Proyecto
+
+### 4.1 Modularidad:
+
+Se implementó un **EventService** para manejar el almacenamiento y la validación de eventos.
+
+Un **UserStoryService** para la agrupación de eventos y la identificación de patrones.
+
+Un **PlaywrightTestGenerator** dedicado a la generación de tests automatizados basados en las historias de usuario.
+
+### 4.2 Uso de Plantillas:
+
+Se utilizó **Jinja2** para crear un sistema flexible de generación de código en los tests de Playwright.
+
+### 4.3 Validación y Extensibilidad:
+
+El sistema admite fácilmente nuevos tipos de acciones gracias a su diseño orientado a plantillas y lógica centralizada.
+
+### 4.4 Tipado de Entradas y Salidas:
+
+Se definieron tipos explícitos en los controladores, lo cual garantiza que los datos que ingresan y salen de los endpoints sean los esperados.
+
+Esto también facilita la generación automática de documentación con **Swagger**.
+
+### 4.5 Documentación con Docstrings:
+
+Todas las funciones principales están documentadas con **docstrings** para mayor claridad y mantenibilidad.
+
+### 4.6 Despliegue con Docker:
+
+La aplicación está configurada para ejecutarse dentro de contenedores **Docker**, lo que facilita su despliegue y portabilidad.
+
+### 4.7 Base de Datos MongoDB:
+
+Se eligió **MongoDB** como base de datos para manejar grandes volúmenes de eventos de manera eficiente y flexible.
+
+### 4.8 Generación de Assertions
+
+Se incluyeron assertions relevantes en los tests:
+
+Acciones de **clic**: Se verifica que la navegación sea correcta si se espera un cambio de URL.
+
+**Entradas (input)**: Se valida que los valores ingresados coincidan con los esperados.
+
+**Navegación**: Se asegura que la URL sea la correcta después de una acción de goto.
+
+## 5. Trade-offs Considerados
+
+**Almacenamiento de Eventos**
+
+Base de datos (MongoDB):
+
+Ofrece persistencia y mejor manejo de grandes volúmenes de datos.
+
+Requiere configuración adicional, pero mejora la escalabilidad.
+
+**Generación Dinámica de Tests**
+
+Jinja2 (actual):
+
+Flexible y simple para generación de código.
+
+Menos estricta en validación de sintaxis del código generado.
+
+Builders específicos (opción futura):
+
+Permitirían generar código con estructuras más robustas.
+
+Serían más complejos de implementar.
+
+**Complejidad de Assertions**
+
+Assertions actuales:
+
+Cubre los casos más comunes de navegación y validación de entradas.
+
+Assertions avanzadas (futuro):
+
+Podrían incluir verificaciones de cambios en el DOM o validaciones visuales (capturas de pantalla).
+
+## 6. Áreas de Mejora Identificadas
+
+**Testing y Validación:**
+
+Automatizar tests para validar que los tests generados se ejecutan correctamente.
+
+**Interfaz de Usuario:**
+
+Crear una interfaz gráfica para visualizar y editar las historias de usuario antes de generar los tests.
+
+**Optimización de Assertions:**
+
+Introducir validaciones más avanzadas como comprobaciones de estado del DOM o capturas de pantalla.

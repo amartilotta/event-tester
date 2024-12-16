@@ -13,18 +13,22 @@ El proyecto se encuentra desarrollado con **Fastapi**, utilizado dentro de un am
 - [2. Levantar contenedor](#2-levantar-contenedor)
   - [2.1 Comandos dentro del contenedor](#21-comandos-dentro-del-contenedor)
 - [3. Descripción de servicios basicos](#3-descripción-de-servicios-basicos)
-- [4. Explicación de Decisiones de Diseño](#4-explicación-de-decisiones-de-diseño)
-  - [4.1 Modularidad](#41-modularidad)
-  - [4.2 Uso de Plantillas](#42-uso-de-plantillas)
-  - [4.3 Validación y Extensibilidad](#43-validación-y-extensibilidad)
-  - [4.4 Tipado de Entradas y Salidas](#44-tipado-de-entradas-y-salidas)
-  - [4.5 Documentación con Docstrings](#45-documentacion-con-docstrings)
-  - [4.6 Despliegue con Docker](#46-despliegue-con-docker)
-  - [4.7 Base de Datos MongoDB](#47-base-de-datos-mongoDB)
-  - [4.8 Generación de Assertions](#48-generacion-de-assertions)
-
-<br />
-
+- [4. Explicación de Decisiones de Diseño](#4-explicación-de-decisiones-de-diseño-✨)
+  - [4.1 Modularidad](#🔗-41-modularidad)
+  - [4.2 Uso de Plantillas](#📄-42-uso-de-plantillas)
+  - [4.3 Validación y Extensibilidad](#✅-43-validación-y-extensibilidad)
+  - [4.4 Tipado de Entradas y Salidas](#🎯-44-tipado-de-entradas-y-salidas)
+  - [4.5 Documentación con Docstrings](#📚-45-documentación-con-docstrings)
+  - [4.6 Despliegue con Docker](#🐋-46-despliegue-con-docker)
+  - [4.7 Base de Datos MongoDB](#📦-47-base-de-datos-mongodb)
+  - [4.8 Generación de Assertions](#⚙️-48-generación-de-assertions)
+- [5. Trade-offs Considerados](#5-trade-offs-considerados-✨)
+  - [5.1 Almacenamiento de Eventos](#📂-51-almacenamiento-de-eventos)
+  - [5.2 Generación Dinámica de Tests](#🛠️-52-generación-dinámica-de-tests)
+  - [5.3 Complejidad de Assertions](#🔍-53-complejidad-de-assertions)
+- [6. Áreas de Mejora Identificadas](#6-áreas-de-mejora-identificadas-🚀)
+  - [6.1 Testing y Validación](#🔧-61-testing-y-validación)
+  - [6.2 Optimización de Assertions](#⚡-62-optimización-de-assertions)
 ## 1. Setup - Primer uso
 
 ### 1.1 Prerrequisitos
@@ -131,98 +135,140 @@ Los servicios más utilizados son:
 
 
 
-## 4. Explicación de Decisiones de Diseño
+## 4. Explicación de Decisiones de Diseño ✨
 
-Arquitectura del Proyecto
+La arquitectura del proyecto se diseñó teniendo en cuenta principios clave para garantizar su modularidad, extensibilidad y capacidad de mantenimiento.
 
-### 4.1 Modularidad:
+---
 
-Se implementó un **EventService** para manejar el almacenamiento y la validación de eventos.
+### **🔗 4.1 Modularidad**
 
-Un **UserStoryService** para la agrupación de eventos y la identificación de patrones.
+Se implementaron los siguientes servicios para organizar las responsabilidades:
+- **EventService**: Maneja el almacenamiento y la validación de eventos.
+- **UserStoryService**: Agrupa eventos y permite identificar patrones en las historias de usuario.
+- **PlaywrightTestGenerator**: Dedicado exclusivamente a la generación automatizada de tests basados en las historias de usuario.
 
-Un **PlaywrightTestGenerator** dedicado a la generación de tests automatizados basados en las historias de usuario.
+Este diseño asegura una separación clara de responsabilidades, lo que facilita la ampliación y el mantenimiento del sistema.
 
-### 4.2 Uso de Plantillas:
+---
 
-Se utilizó **Jinja2** para crear un sistema flexible de generación de código en los tests de Playwright.
+### **📄 4.2 Uso de Plantillas**
 
-### 4.3 Validación y Extensibilidad:
+Para la generación de código en los tests de Playwright, se utilizó **Jinja2**, una herramienta poderosa que permite crear plantillas dinámicas. Esto aporta:
+- **Flexibilidad**: Generación de código adaptable a diferentes escenarios.
+- **Reutilización**: Permite mantener un sistema consistente y eficiente para la creación de tests.
 
-El sistema admite fácilmente nuevos tipos de acciones gracias a su diseño orientado a plantillas y lógica centralizada.
+---
 
-### 4.4 Tipado de Entradas y Salidas:
+### **✅ 4.3 Validación y Extensibilidad**
 
-Se definieron tipos explícitos en los controladores, lo cual garantiza que los datos que ingresan y salen de los endpoints sean los esperados.
+El sistema está diseñado para admitir fácilmente nuevos tipos de acciones gracias a:
+- **Plantillas modulares**: Permiten añadir nuevas acciones sin modificar la lógica central.
+- **Validación centralizada**: Asegura que todos los datos cumplan con los requisitos establecidos antes de ser procesados.
 
-Esto también facilita la generación automática de documentación con **Swagger**.
+---
 
-### 4.5 Documentación con Docstrings:
+### **🎯 4.4 Tipado de Entradas y Salidas**
 
-Todas las funciones principales están documentadas con **docstrings** para mayor claridad y mantenibilidad.
+Se definieron tipos explícitos en los controladores utilizando **Pydantic**, garantizando que:
+- Los datos de entrada y salida sean consistentes.
+- Se facilite la generación automática de documentación con **Swagger**, mejorando la experiencia para los desarrolladores.
 
-### 4.6 Despliegue con Docker:
+---
 
-La aplicación está configurada para ejecutarse dentro de contenedores **Docker**, lo que facilita su despliegue y portabilidad.
+### **📚 4.5 Documentación con Docstrings**
 
-### 4.7 Base de Datos MongoDB:
+Todas las funciones principales están documentadas utilizando **docstrings**. Esto asegura:
+- **Claridad**: Proporciona una guía detallada para entender el propósito y funcionamiento de cada función.
+- **Mantenibilidad**: Facilita la colaboración en equipo y el desarrollo a largo plazo.
 
-Se eligió **MongoDB** como base de datos para manejar grandes volúmenes de eventos de manera eficiente y flexible.
+---
 
-### 4.8 Generación de Assertions
+### **🐋 4.6 Despliegue con Docker**
 
-Se incluyeron assertions relevantes en los tests:
+La aplicación se ejecuta dentro de contenedores **Docker**, lo que aporta:
+- **Portabilidad**: Permite ejecutar el sistema en cualquier entorno compatible con Docker.
+- **Facilidad de despliegue**: Simplifica la configuración inicial y el mantenimiento continuo.
 
-Acciones de **clic**: Se verifica que la navegación sea correcta si se espera un cambio de URL.
+---
 
-**Entradas (input)**: Se valida que los valores ingresados coincidan con los esperados.
+### **📦 4.7 Base de Datos MongoDB**
 
-**Navegación**: Se asegura que la URL sea la correcta después de una acción de goto.
+Se eligió **MongoDB** como base de datos debido a:
+- **Eficiencia**: Ideal para manejar grandes volúmenes de datos de eventos.
+- **Flexibilidad**: Permite trabajar con esquemas dinámicos que se adaptan a las necesidades del proyecto.
 
-## 5. Trade-offs Considerados
+---
 
-**Almacenamiento de Eventos**
+### **⚙️ 4.8 Generación de Assertions**
 
-Base de datos (MongoDB):
+En los tests automatizados se incluyeron assertions relevantes que validan:
+- **Clics**: Comprueban que la navegación sea correcta si se espera un cambio de URL.
+- **Entradas (input)**: Verifican que los valores ingresados coincidan con los esperados.
+- **Navegación**: Aseguran que la URL sea la correcta después de una acción de goto.
 
-Ofrece persistencia y mejor manejo de grandes volúmenes de datos.
+---
 
-Requiere configuración adicional, pero mejora la escalabilidad.
+## 5. Trade-offs Considerados ✨
 
-**Generación Dinámica de Tests**
+Estas son algunas de las decisiones clave y cómo las abordé, buscando siempre equilibrar funcionalidad actual y opciones futuras:
 
-Jinja2 (actual):
+---
 
-Flexible y simple para generación de código.
+### **📂 5.1 Almacenamiento de Eventos**
 
-Menos estricta en validación de sintaxis del código generado.
+**Base de datos MongoDB**  
+- ✅ **Ventajas**:  
+  - **Escalabilidad**: Perfecta para manejar grandes volúmenes de datos de eventos.  
+  - **Flexibilidad**: El esquema dinámico permite adaptarse rápidamente a cambios en los requisitos.  
+- ⚠️ **Desventajas**:  
+  - Requiere **configuración inicial** adicional y monitoreo constante para mantener el rendimiento óptimo.
 
-Builders específicos (opción futura):
+> 💡 **Consideración futura**: Evaluar el uso de bases de datos relacionales o híbridas para escenarios donde se requiera una mayor consistencia transaccional.
 
-Permitirían generar código con estructuras más robustas.
+---
 
-Serían más complejos de implementar.
+### **🛠️ 5.2 Generación Dinámica de Tests**
 
-**Complejidad de Assertions**
+**Jinja2 (solución actual)**  
+- ✅ **Ventajas**:  
+  - **Simplicidad**: Fácil de implementar y personalizar para la generación de código.  
+  - **Flexibilidad**: Permite un rápido ajuste en la estructura de los tests.  
+- ⚠️ **Desventajas**:  
+  - La validación de sintaxis depende de pruebas externas, lo que podría llevar a **errores en tiempo de ejecución**.
 
-Assertions actuales:
+**Builders específicos (opción futura)**  
+- ✅ **Ventajas**:  
+  - **Robustez**: Generan código con estructuras más rígidas y menos propensas a errores.  
+  - **Reutilización**: Más fácil de mantener en equipos grandes.  
+- ⚠️ **Desventajas**:  
+  - **Complejidad adicional**: Requiere mayor inversión inicial en desarrollo y diseño.
 
-Cubre los casos más comunes de navegación y validación de entradas.
+---
 
-Assertions avanzadas (futuro):
+### **🔍 5.3 Complejidad de Assertions**
 
-Podrían incluir verificaciones de cambios en el DOM o validaciones visuales (capturas de pantalla).
+**Assertions actuales**  
+- 🟢 **Alcance**: Se enfocan en validaciones comunes como:  
+  - **Navegación**: Comprobar que las URL sean las esperadas tras acciones específicas.  
+  - **Acciones de entrada**: Validar que los valores ingresados en campos sean correctos.  
+  - **Clicks**: Verificar redirecciones tras un clic.  
+- ⚠️ **Limitaciones**:  
+  - Aún no se realizan comprobaciones avanzadas como validación visual o cambios detallados en el DOM.
 
-## 6. Áreas de Mejora Identificadas
+**Assertions avanzadas (posible mejora)**  
+- ✅ **Oportunidades**:  
+  - **Verificaciones visuales**: Implementar capturas de pantalla automáticas para comparar cambios en interfaces.  
+  - **Estado del DOM**: Validar que el DOM refleje cambios esperados tras eventos clave.  
+- ⚠️ **Desafíos**:  
+  - Incrementan el tiempo de ejecución de los tests y requieren herramientas específicas.
 
-**Testing y Validación:**
+## 6. Áreas de Mejora Identificadas 🚀
 
-Automatizar tests para validar que los tests generados se ejecutan correctamente.
+### **🔧 6.1 Testing y Validación:**
 
-**Interfaz de Usuario:**
+- **Automatizar la ejecución de tests** para asegurar que todos los casos generados se validen correctamente y de manera más eficiente. Esto permitirá una validación continua sin intervención manual.
 
-Crear una interfaz gráfica para visualizar y editar las historias de usuario antes de generar los tests.
+### **⚡ 6.2 Optimización de Assertions:**
 
-**Optimización de Assertions:**
-
-Introducir validaciones más avanzadas como comprobaciones de estado del DOM o capturas de pantalla.
+- **Incorporar validaciones avanzadas** como comprobaciones del estado del DOM o la captura de pantallas, para incrementar la precisión y robustez de las pruebas, y así ofrecer un control más exhaustivo sobre la calidad de las aplicaciones.

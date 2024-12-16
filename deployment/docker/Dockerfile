@@ -20,6 +20,6 @@ RUN poetry config virtualenvs.create false
 RUN if [ "$ENVIRONMENT" == "prod" ]; then poetry install --only main; else poetry install; fi
 
 COPY src ./
-
+COPY templates /templates
 
 CMD ["python3",  "main.py"]

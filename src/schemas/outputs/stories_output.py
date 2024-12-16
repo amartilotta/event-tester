@@ -5,3 +5,4 @@ from pydantic import BaseModel
 
 class StoriesOutput(BaseModel):
     users_events:  List[dict]
+    message: str

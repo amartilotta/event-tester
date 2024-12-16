@@ -1,16 +1,19 @@
 from collections import defaultdict
 from datetime import datetime
+from typing import Dict, List
 
 from models.event_model import Event
+from schemas.event_schema import EventSchema
+from schemas.user_story_schema import Action, Pattern, UserStory
 
 
 class UserStoryService:
-    def __init__(self):
-        pass
 
-    def group_events_by_user(self, events):
+    def _group_events_by_user(self)-> Dict[str, List[EventSchema]]:
         """
-        Agrupa eventos por usuario (`distinct_id`) y los ordena por timestamp.
+        Groups events by user (`distinct_id`) and sorts them by timestamp.
+
+        :return: A dictionary where the keys are user IDs and the values are lists of events.
         """
         events = Event.objects()
 
@@ -29,38 +32,46 @@ class UserStoryService:
             grouped[user_id].sort(key=lambda x: x['properties']['timestamp'])
         return grouped
 
-    def generate_user_story(self, grouped_events):
+    def generate_users_stories(self) -> List[UserStory]:
         """
-        Genera historias de usuario a partir de eventos agrupados.
-        """
-        user_stories = []
-        for user_id, events in grouped_events.items():
-            story_id = f"us-{user_id}"
-            actions = self._extract_actions_from_events(events)
+        Generates user stories from grouped events.
 
-            story = {
-                "id": story_id,
-                "title": f"User Story for {user_id}",
-                "actions": actions
-            }
+        :return: A list of user stories.
+        """
+        grouped_events: Dict[str, List[EventSchema]] = self._group_events_by_user()
+        user_stories: List[UserStory] = []
+        for user_id, events in grouped_events.items():
+            actions:List[Action] = self._extract_actions_from_events(events)
+
+            story = UserStory(
+            id=user_id,
+            title=f"User Story for {user_id}",
+            actions=actions
+        )
             user_stories.append(story)
         return user_stories
 
-    def extract_patterns(self, grouped_events):
+    def extract_patterns(self)-> List[Pattern]:
         """
-        Extrae patrones comunes en las historias de usuario.
+        Extracts common patterns in user stories.
+
+        :return: A list of patterns with their counts.
         """
+        grouped_events = self._group_events_by_user()
         patterns = defaultdict(int)
         for user_id, events in grouped_events.items():
             story = [event['event'] for event in events]
             for i in range(len(story) - 1):
                 pattern = f"{story[i]} -> {story[i + 1]}"
                 patterns[pattern] += 1
-        return patterns
+        return [Pattern(pattern=key, count=value) for key, value in patterns.items()]
 
-    def _extract_actions_from_events(self, events):
+    def _extract_actions_from_events(self, events)-> List[Action]:
         """
-        Convierte eventos en acciones con tipo, class y valor.
+        Converts events into actions with type, class, and value.
+
+        :param events: A list of events to be converted into actions.
+        :return: A list of actions.
         """
         actions = []
         for event in events:
@@ -69,19 +80,19 @@ class UserStoryService:
 
             if event["event"] == "$click":
                 action.update({
-                    "class": properties.get("elementAttributes", {}).get("class"),
+                    "class_": properties.get("elementAttributes", {}).get("class"),
                     "target": properties.get("elementType")
                 })
             elif event["event"] == "$input":
                 action.update({
-                    "class": properties.get("elementAttributes", {}).get("class"),
+                    "class_": properties.get("elementAttributes", {}).get("class"),
                     "target": properties.get("elementType"),
                     "value": properties.get("elementText")
                 })
             elif event["event"] == "$navigate":
                 action.update({
                     "target": properties.get("elementType"),
-                    "url": properties.get("$current_url")
+                    "url": properties.get("current_url")
                 })
 
             actions.append(action)

@@ -4,7 +4,7 @@ from uvicorn import run as uvicorn_run
 from controllers import api_router
 from database.connection import client
 
-app = FastAPI()
+app = FastAPI(debug=True)
 
 app.include_router(api_router.router, prefix="/api/v1")
 

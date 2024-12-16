@@ -1,8 +1,6 @@
 from playwright.sync_api import sync_playwright
 
-
-{% for story in user_stories -%}
-def test_{{ story.id.split('us-')[1].replace("-","_") }}():
+def test_{{ story.id.replace("-","_") }}():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context()
@@ -10,12 +8,15 @@ def test_{{ story.id.split('us-')[1].replace("-","_") }}():
         {% for action in story.actions -%}
         {% if action.type == '$click' -%}
         page.locator("{{ action.selector }}").click()
+        {% if action.expected_url -%}
+        assert page.url == "{{ action.expected_url }}"
+        {% endif -%}
         {% elif action.type == '$input' -%}
-        page.locator("{{ action.selector }}").fill("{{ action.selector }}", "{{ action.value }}")
+        page.locator("{{ action.selector }}").fill("{{ action.value }}")
+        assert page.locator("{{ action.selector }}").input_value() == "{{ action.value }}"
         {% elif action.type == '$navigate' -%}
         page.goto("{{ action.url }}")
+        assert page.url == "{{ action.url }}"
         {% endif -%}
         {% endfor -%}
         browser.close()
-
-{% endfor %}

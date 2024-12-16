@@ -181,6 +181,7 @@ pyrightconfig.json
 
 # dumps
 *.sql
+*/tests/generated/
 
 # Docker override
 docker-compose.override.y*ml

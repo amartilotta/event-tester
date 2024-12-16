@@ -12,6 +12,7 @@ services:
     env_file: .env
     volumes:
       - ./src:/app:cached
+      - ./templates:/templates:cached
       - ./logs:/tmp/logs
       - /etc/localtime:/etc/localtime
     depends_on:
